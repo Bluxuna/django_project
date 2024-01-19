@@ -1,0 +1,18 @@
+{%extends 'base.html' %}
+{% block content %}
+  <h1>{{question.question_text}}</h1>
+  <p>Asked By {{question.user.username}}</p>
+  {% if request.user == question.user %}
+  <a class="btn btn-danger" href="{% url "core:question-delete" question.pk %}">Delete</a>
+  <a class="btn btn-primary" href="{% url "core:question-edit" question.pk %}">Edit</a>
+  <a class="btn btn-primary" href="{% url "core:question-choises" question.pk %}">Edit Choices</a>
+  {%endif%}
+       {% for choise in question.choise_set.all %}
+       <form action="{%url "core:question-vote" choise.pk%}" method="POST" class"form-check">
+        {% csrf_token %}
+        <input type="radio" name="choise" id="choise{{ forloop.counter }}" value="{{ choise.id }}" hidden >
+        <button class="btn btn-primary"for="choise{{ forloop.counter }}">{{ choise.choice_text }} - {{choise.votes}}</button><br>
+        </form>
+       {% endfor %}
+  
+{% endblock content %}

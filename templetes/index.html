@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container p-3">
+    <h1 class="text-primary"> Home page </h1>
+    <a class='btn btn-primary' href='{% url 'core:question-create' %}'>
+         ask a question
+    <a/>
+    <div class="container">
+      <div class="row g-3 mt-3">
+       
+        {% for question in questions %}
+        <div class="col">
+          <div class="card shadow-lg" style="min-height: 250px" style="width:100%">
+           <div class="card-body d-flex justify-content-between flex-column">
+            <h5 class="card-title">{{ question.question_text }}</h5>
+               <h6 class="card-subtitle mb-2 text-body-secondary">{{ question.user.username }} Asked {{ question.create_time|timesince}} ago</h6>
+                  <p class="card-text">Modified at {{ question.edit_time|timesince}} ago</p>
+        
+               <a href="{{ question.get_absolute_url }}" class="card-link btn btn-primary btn-sm">
+                   Details
+               </a>
+             </div>
+          </div>
+        </div>
+     {% endfor %}
+      </div>
+    </div>
+</div>
+
+<div class="pagination text-center justify-content-center">
+  <span class="step-links">
+      {% if page_obj.has_previous %}
+          <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-primary">&#10094;&#10094;</a>
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-primary">&#10094;</a>
+      {% endif %}
+
+      <span class="current btn btn-primary disabled">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-primary">&#10095;</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-primary">&#10095;&#10095;</a>
+      {% endif %}
+  </span>
+</div>
+{% endblock %}

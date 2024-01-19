@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <h1>{{ question.question_text }}</h1>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% for choise in question.choise_set.all %}
+        <input type="radio" name="choise" id="choise{{ forloop.counter }}" value="{{ choise.id }}" >
+        <label for="choise{{ forloop.counter }}">{{ choise.choice_text }}</label><br>
+    {% endfor %}
+    <button class="btn btn-primary">Vote</button>
+    <button class="btn btn-danger">Clear</button>
+
+
+</form>
+
+
+{% comment %} <ul>
+  {% for choise in question.choise_set.all %}
+     <li>
+        {{ choise.choice_text }}
+     </li>
+   {% endfor %}
+    </ul> {% endcomment %}
+  <a href='{% url 'core:question-results' question.id %}'>See the results</a>
+{% endblock content %}
